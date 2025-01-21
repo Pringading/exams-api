@@ -1,0 +1,4 @@
+planning.txt
+venv
+.env
+**/__pycache__
