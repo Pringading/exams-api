@@ -22,8 +22,11 @@ class TestConnection:
                 db.close()
 
 
-class TestSeed:
-    @pytest.fixture()
+class TestCreateDropExamsTable:
+    """Testing the functions that create and drop the exams table within 
+    db/seed.py"""
+
+    @pytest.fixture(scope='function')
     def db_connection(self):
         """Pytest fixture that yields a databse connection
         
@@ -36,17 +39,45 @@ class TestSeed:
             yield db
         finally:
             if db:
+                # remove exams table before closing the connection.
+                db.run('DROP TABLE IF EXISTS exams;')
                 db.close()
 
 
     @pytest.mark.it('Create adds exams table to the database')
     def test_exams_table_created(self, db_connection):
         create_exams_table(db_connection)
+
+        # gets list of public tables in the database, (should only be 1).
         result = db_connection.run(
             """SELECT table_name
             FROM information_schema.tables
             WHERE table_schema = 'public';"""
         )
-        db_connection.run('DROP TABLE IF EXISTS exams;')
         assert result == [['exams']]
+    
+
+    @pytest.mark.it('Exams timetable has the expected columns')
+    def test_exams_timetable_has_expected_columns(self, db_connection):
+        expected_columns = [
+            'syllabus_code',
+            'component_code',
+            'board',
+            'subject',
+            'title',
+            'date',
+            'time',
+            'duration'
+        ]
+        create_exams_table(db_connection)
+        result = db_connection.run(
+            """SELECT column_name
+            FROM information_schema.columns
+            WHERE table_name = 'exams';"""
+        )
+        for column in expected_columns:
+            assert [column] in result
+        assert len(result) == len(expected_columns)
+    
+    # test primary key
 

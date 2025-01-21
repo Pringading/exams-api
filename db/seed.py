@@ -9,8 +9,23 @@ def seed_db() -> None:
 
     pass
 
+
 def create_exams_table(db: Connection) -> None:
-    db.run("""CREATE TABLE exams (name INT);""")
+    """creates exam table to the database provided(db)"""
+
+    db.run("""
+        CREATE TABLE exams (
+           syllabus_code VARCHAR(6) NOT NULL,
+           component_code VARCHAR(4),
+           board VARCHAR(20) NOT NULL,
+           subject VARCHAR(40),
+           title VARCHAR(60),
+           date DATE,
+           time CHAR(2),
+           duration INTERVAL
+        );
+    """)
+
 
 def drop_exams_table(db: Connection) -> None:
     pass
