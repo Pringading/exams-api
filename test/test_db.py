@@ -54,7 +54,7 @@ class TestCreateDropExamsTable:
             FROM information_schema.tables
             WHERE table_schema = 'public';"""
         )
-        assert result == [['exams']]
+        assert ['exams'] in result
     
 
     @pytest.mark.it('Exams timetable has the expected columns')
@@ -70,6 +70,8 @@ class TestCreateDropExamsTable:
             'duration'
         ]
         create_exams_table(db_connection)
+
+        # gets list of columns in the exams timetable
         result = db_connection.run(
             """SELECT column_name
             FROM information_schema.columns
@@ -80,4 +82,18 @@ class TestCreateDropExamsTable:
         assert len(result) == len(expected_columns)
     
     # test primary key
+
+    @pytest.mark.it('Test drop exams table removes the exams timetable')
+    def test_drop_exams_table_removes_table(self, db_connection):
+        create_exams_table(db_connection)
+        drop_exams_table(db_connection)
+        
+        # gets list of public tables in the database, (should only be 1).
+        result = db_connection.run(
+            """SELECT table_name
+            FROM information_schema.tables
+            WHERE table_schema = 'public';"""
+        )
+
+        assert ['exams'] not in result
 

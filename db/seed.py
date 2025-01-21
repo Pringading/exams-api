@@ -28,4 +28,4 @@ def create_exams_table(db: Connection) -> None:
 
 
 def drop_exams_table(db: Connection) -> None:
-    pass
+    db.run("DROP TABLE IF EXISTS exams;")
