@@ -55,3 +55,17 @@ class TestSplitExaminationCode:
         result = split_examination_code_col(test_df)
         assert 'syllabus_code' in result.columns
         assert 'component_code' in result.columns
+    
+
+    @pytest.mark.it('Test syllabus code column has expected values')
+    def test_syllabus_code_values(self, test_df):
+        expected = ["exam1", "exam2", "exam3"]
+        result = split_examination_code_col(test_df)
+        assert result["syllabus_code"].tolist() == expected
+
+    
+    @pytest.mark.it('Test component code column has expected values')
+    def test_component_code_values(self, test_df):
+        expected = ["01", "02", "03"]
+        result = split_examination_code_col(test_df)
+        assert result["component_code"].tolist() == expected

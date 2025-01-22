@@ -34,6 +34,6 @@ def split_examination_code_col(df: pd.DataFrame) -> pd.DataFrame:
                 component_code = "01"
     """
 
-    df['syllabus_code'] = "syllabus"
-    df['component_code'] = "component"
+    df['syllabus_code'] = df['Examination code'].str.split().str[0]
+    df['component_code'] = df["Examination code"].str.split().str[1]
     return df
