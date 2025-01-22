@@ -22,7 +22,8 @@ def create_exams_table(db: Connection) -> None:
            title VARCHAR(60),
            date DATE,
            time CHAR(2),
-           duration INTERVAL
+           duration INTERVAL,
+           PRIMARY KEY(syllabus_code, component_code)
         );
     """)
 

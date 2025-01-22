@@ -48,7 +48,7 @@ class TestCreateDropExamsTable:
     def test_exams_table_created(self, db_connection):
         create_exams_table(db_connection)
 
-        # gets list of public tables in the database, (should only be 1).
+        # gets list of public tables in the database.
         result = db_connection.run(
             """SELECT table_name
             FROM information_schema.tables
@@ -71,7 +71,7 @@ class TestCreateDropExamsTable:
         ]
         create_exams_table(db_connection)
 
-        # gets list of columns in the exams timetable
+        # gets list of columns in the exams table
         result = db_connection.run(
             """SELECT column_name
             FROM information_schema.columns
@@ -80,10 +80,8 @@ class TestCreateDropExamsTable:
         for column in expected_columns:
             assert [column] in result
         assert len(result) == len(expected_columns)
-    
-    # test primary key
 
-    @pytest.mark.it('Test drop exams table removes the exams timetable')
+    @pytest.mark.it('Test drop exams table removes the exams table')
     def test_drop_exams_table_removes_table(self, db_connection):
         create_exams_table(db_connection)
         drop_exams_table(db_connection)
