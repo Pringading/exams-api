@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 EXCEL_GCE_DATA = "db/data/Edexcel_GCE.xlsx"
 EXCEL_GCSE_DATA = "db/data/Edexcel_GCSE.xlsx"
 
@@ -19,4 +18,19 @@ def excel_to_df(filepath: str, sheet:int=2) -> pd.DataFrame:
     """
     
     df = pd.read_excel(filepath, sheet_name=sheet)
+    return df
+
+# split examination code into 2 columns
+def split_examination_code_col(df: pd.DataFrame) -> pd.DataFrame:
+    """Splits examination code into 2 columns, using space as a delimiter
+    
+    Args:
+        df (DataFrame): With examination code column made up
+            column is 2 strings with a space eg. "9MA0 01"
+    
+    Returns:
+        same DataFrame with 2 new columns: Syllabus code and Component Code
+            eg. Syllabus code = "9MAO
+                Component code = "01"
+    """
     return df
