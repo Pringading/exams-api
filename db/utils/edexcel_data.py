@@ -22,15 +22,18 @@ def excel_to_df(filepath: str, sheet:int=2) -> pd.DataFrame:
 
 # split examination code into 2 columns
 def split_examination_code_col(df: pd.DataFrame) -> pd.DataFrame:
-    """Splits examination code into 2 columns, using space as a delimiter
+    """Splits Examination code into 2 columns, using space as a delimiter
     
     Args:
-        df (DataFrame): With examination code column made up
+        df (DataFrame): With 'Examination code' column made up
             column is 2 strings with a space eg. "9MA0 01"
     
     Returns:
         same DataFrame with 2 new columns: Syllabus code and Component Code
-            eg. Syllabus code = "9MAO
-                Component code = "01"
+            eg. syllabus_code = "9MAO
+                component_code = "01"
     """
+
+    df['syllabus_code'] = "syllabus"
+    df['component_code'] = "component"
     return df

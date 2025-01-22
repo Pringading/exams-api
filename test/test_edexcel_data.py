@@ -35,7 +35,7 @@ class TestSplitExaminationCode:
         """Returns data frame with one column,'Examination Code' and 3 rows"""
 
         df = pd.DataFrame({
-            "Examination Code": ["exam1 01", "exam2 02", "exam3 03"]
+            "Examination code": ["exam1 01", "exam2 02", "exam3 03"]
         })
         return df
 
@@ -46,3 +46,12 @@ class TestSplitExaminationCode:
 
         result = split_examination_code_col(test_df)
         assert isinstance(result, pd.DataFrame)
+
+    
+    @pytest.mark.it('Test returned df has Syllabus Code and Component Code ' +
+        'functions')
+    def test_returned_columns(self, test_df):
+        
+        result = split_examination_code_col(test_df)
+        assert 'syllabus_code' in result.columns
+        assert 'component_code' in result.columns
