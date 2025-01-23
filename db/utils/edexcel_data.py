@@ -54,4 +54,12 @@ def update_edexcel_column_names(df: pd.DataFrame) -> pd.DataFrame:
         
     """
     new_df = pd.DataFrame()
+    new_df['syllabus_code'] = []
+    new_df['component_code'] = []
+    new_df['board'] = []
+    new_df['subject'] = []
+    new_df['title'] = []
+    new_df['date'] = []
+    new_df['time'] = []
+    new_df['duration'] = []
     return new_df

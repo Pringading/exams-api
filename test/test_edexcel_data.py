@@ -78,16 +78,16 @@ class TestSplitExaminationCode:
 class TestUpdateExcelColumnNames:
     @pytest.fixture
     def test_df(self):
-        data = {}
-        data['syllabus_code'] = []
-        data['component_code'] = []
-        data['Date'] = []
-        data['Board'] = []
-        data['Subject'] = []
-        data['Title'] = []
-        data['Time'] = []
-        data['Duration'] = []
-        return pd.DataFrame(data)
+        df = pd.DataFrame()
+        df['syllabus_code'] = []
+        df['component_code'] = []
+        df['Date'] = []
+        df['Board'] = []
+        df['Subject'] = []
+        df['Title'] = []
+        df['Time'] = []
+        df['Duration'] = []
+        return df
 
 
     @pytest.mark.it('Test returns dataframe.')
@@ -97,6 +97,18 @@ class TestUpdateExcelColumnNames:
         assert isinstance(result, pd.DataFrame)
     
     @pytest.mark.it('Test returns dataframe with expected columns')
-    @pytest.mark.skip
-    def test_returns_expected_columns(self):
-        pass
+    def test_returns_expected_columns(self, test_df):
+        expected_columns = [
+            'syllabus_code',
+            'component_code',
+            'board',
+            'subject',
+            'title',
+            'date',
+            'time',
+            'duration'
+        ]
+        result = update_edexcel_column_names(test_df)
+        for column in expected_columns:
+            assert column in result.columns
+        assert len(result.columns) == len(expected_columns)
