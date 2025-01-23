@@ -3,6 +3,7 @@ import pytest
 from db.utils.edexcel_data import (
     excel_to_df, 
     split_examination_code_col, 
+    convert_time_to_am_pm,
     update_edexcel_column_names
 )
 
@@ -29,7 +30,7 @@ class TestExcelToDF:
         result = excel_to_df("db/data/Edexcel_GCE.xlsx")
         for column in expected_columns:
             assert column in result.columns
-        
+
         
 class TestSplitExaminationCode:
     "Test split_examination_code_col function from db/utils/edexcel_data.py"
@@ -74,6 +75,26 @@ class TestSplitExaminationCode:
         result = split_examination_code_col(test_df)
         assert result["component_code"].tolist() == expected
 
+
+class TestConvertTimeToAMPM:
+    """Testing convert_time_to_am_pm function inside data/edexcel_data.py"""
+
+    @pytest.mark.it('Returns dataframe')
+    def test_returns_df(self):
+        test_df = pd.DataFrame({'Time': []})
+        result = convert_time_to_am_pm(test_df)
+        assert isinstance(result, pd.DataFrame)
+
+    @pytest.mark.it('Time column has AM and PM instead of Morning and Afternoon')
+    @pytest.mark.skip
+    def test_time_column_has_expected_values(self):
+        pass
+
+    @pytest.mark.it('Time column has ignores values that aren\'t Morning or' +
+        ' Afternoon')
+    @pytest.mark.skip
+    def test_other_values(self):
+        pass
 
 class TestUpdateExcelColumnNames:
     @pytest.fixture

@@ -39,8 +39,20 @@ def split_examination_code_col(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def convert_time_to_am_pm(df: pd.DataFrame) -> pd.DataFrame:
+    """Converts Time column from Morning/Afternoon to AM/PM
+    
+    Args:
+        df(DataFrame) with 'Time' column with values 'Morning' and 'Afternoon'
+    
+    Returns: DataFrame with 'Time' column with values 'AM', 'PM' or null
+    """
+
+    return df
+
+
 def update_edexcel_column_names(df: pd.DataFrame) -> pd.DataFrame:
-    """Takes dataframe with columns
+    """Returns dataframe with same column names as the destination database.
 
     Args:
         df (DataFrame): which includes following columns:
