@@ -1,7 +1,7 @@
 import pandas as pd
 
-EXCEL_GCE_DATA = "db/data/Edexcel_GCE.xlsx"
-EXCEL_GCSE_DATA = "db/data/Edexcel_GCSE.xlsx"
+EDEXCEL_GCE_DATA = "db/data/Edexcel_GCE.xlsx"
+EDEXCEL_GCSE_DATA = "db/data/Edexcel_GCSE.xlsx"
 
 
 def excel_to_df(filepath: str, sheet:int=2) -> pd.DataFrame:
@@ -53,13 +53,16 @@ def update_edexcel_column_names(df: pd.DataFrame) -> pd.DataFrame:
             duration
         
     """
+
     new_df = pd.DataFrame()
-    new_df['syllabus_code'] = []
-    new_df['component_code'] = []
-    new_df['board'] = []
-    new_df['subject'] = []
-    new_df['title'] = []
-    new_df['date'] = []
-    new_df['time'] = []
-    new_df['duration'] = []
+    new_df['syllabus_code'] = df['syllabus_code']
+    new_df['component_code'] = df['component_code']
+    new_df['board'] = df['Board']
+    new_df['subject'] = df['Subject']
+    new_df['title'] = df['Title']
+    new_df['date'] = df['Date']
+    new_df['time'] = df['Time']
+    new_df['duration'] = df['Duration']
     return new_df
+
+

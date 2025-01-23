@@ -79,14 +79,14 @@ class TestUpdateExcelColumnNames:
     @pytest.fixture
     def test_df(self):
         df = pd.DataFrame()
-        df['syllabus_code'] = []
-        df['component_code'] = []
-        df['Date'] = []
-        df['Board'] = []
-        df['Subject'] = []
-        df['Title'] = []
-        df['Time'] = []
-        df['Duration'] = []
+        df['syllabus_code'] = ["code1"]
+        df['component_code'] = ["code1"]
+        df['Date'] = ["2060-01-01"]
+        df['Board'] = ["Pearson"]
+        df['Subject'] = ["Subject1"]
+        df['Title'] = ["Title1"]
+        df['Time'] = ["AM"]
+        df['Duration'] = ["1h 30m"]
         return df
 
 
@@ -112,3 +112,17 @@ class TestUpdateExcelColumnNames:
         for column in expected_columns:
             assert column in result.columns
         assert len(result.columns) == len(expected_columns)
+    
+
+    @pytest.mark.it('Test returns expected data')
+    def test_returns_expected_data(self, test_df):
+        result = update_edexcel_column_names(test_df)
+        assert result['syllabus_code'].tolist() == ["code1"]
+        assert result['component_code'].tolist() == ["code1"]
+        assert result['date'].tolist() == ["2060-01-01"]
+        assert result['board'].tolist() == ["Pearson"]
+        assert result['subject'].tolist() == ["Subject1"]
+        assert result['title'].tolist() == ["Title1"]
+        assert result['time'].tolist() == ["AM"]
+        assert result['duration'].tolist() == ["1h 30m"]
+
