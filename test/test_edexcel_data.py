@@ -94,9 +94,11 @@ class TestConvertTimeToAMPM:
 
     @pytest.mark.it('Time column has ignores values that aren\'t Morning or' +
         ' Afternoon')
-    @pytest.mark.skip
     def test_other_values(self):
-        pass
+        test_df = pd.DataFrame({'Time': ['Morning', 'Afternoon', 'Other', 'Morning']})
+        expected = ['AM', 'PM', None, 'AM']
+        result = convert_time_to_am_pm(test_df)
+        assert result['Time'].tolist() == expected
 
 class TestUpdateExcelColumnNames:
     @pytest.fixture

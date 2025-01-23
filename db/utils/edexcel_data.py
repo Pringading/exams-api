@@ -47,8 +47,10 @@ def convert_time_to_am_pm(df: pd.DataFrame) -> pd.DataFrame:
     
     Returns: DataFrame with 'Time' column with values 'AM', 'PM' or null
     """
+
+    lookup = {'Morning': 'AM', 'Afternoon': 'PM'}
     times = df['Time'].tolist()
-    df['Time'] = ['AM' if time == 'Morning' else 'PM' for time in times]
+    df['Time'] = [lookup[time] if time in lookup else None for time in times]
     return df
 
 
