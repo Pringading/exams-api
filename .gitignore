@@ -2,3 +2,4 @@ planning.txt
 venv
 .env
 **/__pycache__
+.coverage
