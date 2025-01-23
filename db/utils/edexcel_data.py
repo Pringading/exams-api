@@ -20,7 +20,7 @@ def excel_to_df(filepath: str, sheet:int=2) -> pd.DataFrame:
     df = pd.read_excel(filepath, sheet_name=sheet)
     return df
 
-# split examination code into 2 columns
+
 def split_examination_code_col(df: pd.DataFrame) -> pd.DataFrame:
     """Splits Examination code into 2 columns, using space as a delimiter
     
@@ -37,3 +37,21 @@ def split_examination_code_col(df: pd.DataFrame) -> pd.DataFrame:
     df['syllabus_code'] = df['Examination code'].str.split().str[0]
     df['component_code'] = df["Examination code"].str.split().str[1]
     return df
+
+
+def update_edexcel_column_names(df: pd.DataFrame) -> pd.DataFrame:
+    """Takes dataframe with columns
+
+    Args:
+        df (DataFrame): which includes following columns:
+            syllabus_code, component_code, Date,
+            Board, Subject, Title, Time, Duration
+    
+    Returns:
+        Dataframe with following columns:
+            syllabus_code, component_code, board, subject, title, date, time, 
+            duration
+        
+    """
+    new_df = pd.DataFrame()
+    return new_df

@@ -1,6 +1,10 @@
-from db.utils.edexcel_data import excel_to_df, split_examination_code_col
 import pandas as pd
 import pytest
+from db.utils.edexcel_data import (
+    excel_to_df, 
+    split_examination_code_col, 
+    update_edexcel_column_names
+)
 
 
 class TestExcelToDF:
@@ -69,3 +73,30 @@ class TestSplitExaminationCode:
         expected = ["01", "02", "03"]
         result = split_examination_code_col(test_df)
         assert result["component_code"].tolist() == expected
+
+
+class TestUpdateExcelColumnNames:
+    @pytest.fixture
+    def test_df(self):
+        data = {}
+        data['syllabus_code'] = []
+        data['component_code'] = []
+        data['Date'] = []
+        data['Board'] = []
+        data['Subject'] = []
+        data['Title'] = []
+        data['Time'] = []
+        data['Duration'] = []
+        return pd.DataFrame(data)
+
+
+    @pytest.mark.it('Test returns dataframe.')
+    def test_returns_df(self, test_df):
+
+        result = update_edexcel_column_names(test_df)
+        assert isinstance(result, pd.DataFrame)
+    
+    @pytest.mark.it('Test returns dataframe with expected columns')
+    @pytest.mark.skip
+    def test_returns_expected_columns(self):
+        pass
