@@ -1,15 +1,15 @@
 import pandas as pd
 import pytest
 from db.utils.edexcel_data import (
-    excel_to_df, 
-    split_examination_code_col, 
+    excel_to_df,
+    split_examination_code_col,
     convert_time_to_am_pm,
     update_edexcel_column_names
 )
 
 
 class TestExcelToDF:
-    """Testing excel_to_df function from the db/utils/edexcel_data.py workbook"""
+    """Testing excel_to_df function in db/utils/edexcel_data.py file"""
 
     @pytest.mark.it('Test excel to df function returns a dataframe')
     def test_excel_to_df_returns_df(self):
@@ -18,8 +18,8 @@ class TestExcelToDF:
         result = excel_to_df("db/data/Edexcel_GCE.xlsx")
         assert isinstance(result, pd.DataFrame)
 
-
-    @pytest.mark.it('Test excel to df returns dataframe with the expected columns')
+    @pytest.mark.it('Test excel to df returns dataframe with the expected ' +
+                    'columns')
     def test_excel_to_df_columns(self):
         """Testing that the returned dataframe has the expected columns"""
 
@@ -31,7 +31,7 @@ class TestExcelToDF:
         for column in expected_columns:
             assert column in result.columns
 
-        
+
 class TestSplitExaminationCode:
     "Test split_examination_code_col function from db/utils/edexcel_data.py"
 
@@ -47,30 +47,41 @@ class TestSplitExaminationCode:
     @pytest.mark.it('Test split_examination_code_col returns dataframe')
     def test_split_exam_code_returns_df(self, test_df):
         """Test that split_examination_code_col function returns a datafame
-        uses test_df fixture."""
+
+        Uses test_df fixture."""
 
         result = split_examination_code_col(test_df)
         assert isinstance(result, pd.DataFrame)
 
-    
     @pytest.mark.it('Test returned df has Syllabus Code and Component Code ' +
-        'functions')
+                    'functions')
     def test_returned_columns(self, test_df):
-        
+        """Testing adds two columns with the expected names to the dataframe
+
+        uses test_df fixture."""
+
         result = split_examination_code_col(test_df)
         assert 'syllabus_code' in result.columns
         assert 'component_code' in result.columns
-    
 
     @pytest.mark.it('Test syllabus code column has expected values')
     def test_syllabus_code_values(self, test_df):
+        """Testing syllabus_code column extracts values before the space in
+        Examination code column of given dataframe.
+
+        uses test_df fixture"""
+
         expected = ["exam1", "exam2", "exam3"]
         result = split_examination_code_col(test_df)
         assert result["syllabus_code"].tolist() == expected
 
-    
     @pytest.mark.it('Test component code column has expected values')
     def test_component_code_values(self, test_df):
+        """Testing syllabus_code column extracts values after the space in
+        in Examination code column of given dataframe.
+
+        uses test_df fixture"""
+
         expected = ["01", "02", "03"]
         result = split_examination_code_col(test_df)
         assert result["component_code"].tolist() == expected
@@ -81,28 +92,43 @@ class TestConvertTimeToAMPM:
 
     @pytest.mark.it('Returns dataframe')
     def test_returns_df(self):
+        """Testing return value is a pandas dataframe object."""
+
         test_df = pd.DataFrame({'Time': []})
         result = convert_time_to_am_pm(test_df)
         assert isinstance(result, pd.DataFrame)
 
-    @pytest.mark.it('Time column has AM and PM instead of Morning and Afternoon')
+    @pytest.mark.it('Time column has AM and PM instead of Morning and' +
+                    ' Afternoon')
     def test_time_column_has_expected_values(self):
+        """Testing returned dataframe converts 'Morning' to 'AM' and
+        'Afternoon' to 'PM' in Time column of given dataframe."""
+
         test_df = pd.DataFrame({'Time': ['Morning', 'Afternoon', 'Morning']})
         expected = ['AM', 'PM', 'AM']
         result = convert_time_to_am_pm(test_df)
         assert result['Time'].tolist() == expected
 
     @pytest.mark.it('Time column has ignores values that aren\'t Morning or' +
-        ' Afternoon')
+                    ' Afternoon')
     def test_other_values(self):
-        test_df = pd.DataFrame({'Time': ['Morning', 'Afternoon', 'Other', 'Morning']})
+        """Testing returned dataframe shows any values other than Morning
+        or Afternoon as null."""
+
+        test_df = pd.DataFrame({
+            'Time': ['Morning', 'Afternoon', 'Other', 'Morning']
+        })
         expected = ['AM', 'PM', None, 'AM']
         result = convert_time_to_am_pm(test_df)
         assert result['Time'].tolist() == expected
 
+
 class TestUpdateExcelColumnNames:
     @pytest.fixture
     def test_df(self):
+        """Test dataframe with necessary columns from Excel sheet. Omits
+        any columns not accessed by update_excel_column_names function."""
+
         df = pd.DataFrame()
         df['syllabus_code'] = ["code1"]
         df['component_code'] = ["code1"]
@@ -114,15 +140,22 @@ class TestUpdateExcelColumnNames:
         df['Duration'] = ["1h 30m"]
         return df
 
-
     @pytest.mark.it('Test returns dataframe.')
     def test_returns_df(self, test_df):
+        """Testing function returns a pandas DataFrame object.
+
+        uses test_df fixture."""
 
         result = update_edexcel_column_names(test_df)
         assert isinstance(result, pd.DataFrame)
-    
+
     @pytest.mark.it('Test returns dataframe with expected columns')
     def test_returns_expected_columns(self, test_df):
+        """Testing returned dataframe has columns needed for the exams table
+        in the destination database.
+
+        uses test_df fixture."""
+
         expected_columns = [
             'syllabus_code',
             'component_code',
@@ -137,10 +170,13 @@ class TestUpdateExcelColumnNames:
         for column in expected_columns:
             assert column in result.columns
         assert len(result.columns) == len(expected_columns)
-    
 
     @pytest.mark.it('Test returns expected data')
     def test_returns_expected_data(self, test_df):
+        """Checking expected data is in expected column.
+
+        uses test_df."""
+
         result = update_edexcel_column_names(test_df)
         assert result['syllabus_code'].tolist() == ["code1"]
         assert result['component_code'].tolist() == ["code1"]
@@ -150,4 +186,3 @@ class TestUpdateExcelColumnNames:
         assert result['title'].tolist() == ["Title1"]
         assert result['time'].tolist() == ["AM"]
         assert result['duration'].tolist() == ["1h 30m"]
-
