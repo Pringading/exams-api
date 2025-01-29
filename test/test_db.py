@@ -1,8 +1,10 @@
 import pytest
+import pandas as pd
 from pg8000.native import Connection
 from db.connection import connect_to_db
 from db.seed import (
-    seed_db, create_exams_table, drop_exams_table
+    seed_db, create_exams_table, drop_exams_table,
+    extract_headings_from_df, df_to_string, insert_data_into_exams_table
 )
 
 
@@ -94,4 +96,10 @@ class TestCreateDropExamsTable:
         )
 
         assert ['exams'] not in result
+
+class TestInsertDataFuncs:
+    @pytest.mark.it('Extracts headings from dataframe.')
+    def test_extracts_headings(self):
+        test_df = pd.DataFrame({"heading1": [1], "heading2":[2]})
+        assert extract_headings_from_df(test_df) == 'heading1, heading2'
 
