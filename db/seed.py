@@ -33,6 +33,7 @@ def create_exams_table(db: Connection) -> None:
         );
     """)
 
+
 def extract_headings_from_df(df: pd.DataFrame) -> str:
     """Extracts headings from given dataframe.
     
@@ -42,11 +43,27 @@ def extract_headings_from_df(df: pd.DataFrame) -> str:
     
     return ", ".join(identifier(heading) for heading in df.columns)
 
+
 def df_to_string(df: pd.DataFrame) -> str:
-    """Extracts data from dataframe and converts data to a string
+    """Converts each row in dataframe to a comma separated string.
+
+    Each row is surrounded by brackets and separated by a comma to be used in
+    a SQL INSERT query. Uses pg8000 literal function to prevent SQL injection.
+
+    Example:
+    Input:
+        | 1 | 2 | 3 |
+        | 2 | 3 | 4 |
+    Output:
+        "('1', '2', '3'), ('2', '3', '4')"
     """
-    
-    pass
+    row_strings = []
+    for row in df.values:
+        string = ", ".join(literal(value) for value in row)
+        print(string)
+        row_strings.append("(" + string + ")")
+    return ", ".join(row_strings)
+
 
 def insert_data_into_exams_table(db: Connection, df: pd.DataFrame) -> None:
     """Inserts data from a dataframe into exams table.

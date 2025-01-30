@@ -97,9 +97,15 @@ class TestCreateDropExamsTable:
 
         assert ['exams'] not in result
 
+
 class TestInsertDataFuncs:
-    @pytest.mark.it('Extracts headings from dataframe.')
+    @pytest.mark.it('Extracts headings from dataframe to comma separated string.')
     def test_extracts_headings(self):
         test_df = pd.DataFrame({"heading1": [1], "heading2":[2]})
         assert extract_headings_from_df(test_df) == 'heading1, heading2'
 
+    @pytest.mark.it('Transforms data form dataframe to a comma separated string')
+    def test_extracts_data(self):
+        expected = "('1', '2', '3'), ('2', '3', '4')"
+        test_df = pd.DataFrame({"h1": [1, 2], "h2": [2, 3], "h3": [3, 4]})
+        assert df_to_string(test_df) == expected
