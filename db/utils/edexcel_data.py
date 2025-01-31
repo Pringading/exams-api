@@ -49,8 +49,9 @@ def convert_time_to_am_pm(df: pd.DataFrame) -> pd.DataFrame:
     """
 
     lookup = {'Morning': 'AM', 'Afternoon': 'PM'}
-    replace_time = lambda time: lookup[time] if time in lookup else None
-    df['Time'] = df['Time'].apply(replace_time)
+    df['Time'] = df['Time'].apply(
+        lambda time: lookup[time] if time in lookup else None
+    )
     return df
 
 
@@ -82,14 +83,14 @@ def update_edexcel_column_names(df: pd.DataFrame) -> pd.DataFrame:
 
 def edexcel_data_to_df(filepath: str, sheet: int = 2) -> pd.DataFrame:
     """Loads Edexcel data from excel workbook into dataframe.
-    
+
     Args:
         filepath(str): path to excel workbook.
         sheet(int): index of worksheet to be imported, 0-indexed
     Returns:
         pandas DataFrame ready to be inserted into exams table of destination
         database."""
-    
+
     df = excel_to_df(filepath, sheet)
     df = split_examination_code_col(df)
     df = convert_time_to_am_pm(df)

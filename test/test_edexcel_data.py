@@ -28,7 +28,7 @@ class TestExcelToDF:
             'Date', 'Exam series', 'Board', 'Examination code',
             'Subject', 'Title', 'Time', 'Duration'
         ]
-        result = excel_to_df("db/data/Edexcel_GCE.xlsx")
+        result = excel_to_df("test/data/test_edexcel_gcse.xlsx")
         for column in expected_columns:
             assert column in result.columns
 
@@ -190,7 +190,17 @@ class TestUpdateExcelColumnNames:
 
 
 class TestExcelDataToDF:
-    @pytest.mark.it('Test excel_to_df is called')
+    @pytest.mark.it('Test excel data to df transforms data from excel ' +
+                    'spreadsheet to expected format.')
     def test_calls_excel_to_df(self):
-        pass
-    
+        result = edexcel_data_to_df("test/data/test_edexcel_gcse.xlsx")
+        assert result['syllabus_code'].tolist() == ["TEST"] * 3
+        assert result['component_code'].tolist() == ["01", "02", "03"]
+        assert result['date'].astype(str).tolist() == ["2025-05-22"] * 3
+        assert result['board'].tolist() == ["Pearson"] * 3
+        assert result['subject'].tolist() == ["GCSE Test"] * 3
+        assert result['title'].tolist() == [
+            "Test Exam 1", "Test Exam 2", "Test Exam 3"
+        ]
+        assert result['time'].tolist() == ["PM", "AM", "PM"]
+        assert result['duration'].tolist() == ["0h 35m", "1h 45m", "2h"]
