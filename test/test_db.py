@@ -1,5 +1,6 @@
 import pytest
 import pandas as pd
+from unittest.mock import patch
 from pg8000.native import Connection
 from db.connection import connect_to_db
 from db.seed import (
@@ -38,6 +39,7 @@ class TestCreateDropExamsTable:
         db = None
         try:
             db = connect_to_db()
+            db.run('DROP TABLE IF EXISTS exams;')
             yield db
         finally:
             if db:
@@ -99,6 +101,9 @@ class TestCreateDropExamsTable:
 
 
 class TestInsertDataFuncs:
+    """Testing extract_headings_from_df, df_to_string and 
+    insert_data_into_exams_table functions from db/seed.py"""
+
     @pytest.mark.it('Extracts headings from dataframe to comma separated string.')
     def test_extracts_headings(self):
         test_df = pd.DataFrame({"heading1": [1], "heading2":[2]})
@@ -109,3 +114,75 @@ class TestInsertDataFuncs:
         expected = "('1', '2', '3'), ('2', '3', '4')"
         test_df = pd.DataFrame({"h1": [1, 2], "h2": [2, 3], "h3": [3, 4]})
         assert df_to_string(test_df) == expected
+
+    @pytest.mark.it('insert data function adds data to the exams table')
+    def test_adds_data_to_table(self):
+        test_df = pd.DataFrame({
+            "syllabus_code": ["syll"],
+            "component_code": ["comp"],
+            "date": ["01-01-01"],
+            "board": ["Pearson"],
+            "subject": ["Subject1"],
+            "title": ["title1"],
+            "time": ["AM"],
+            "duration": ["01h 30m"]
+        })
+        expected = [
+            'syll', 
+            'comp', 
+            'Pearson', 
+            'Subject1', 
+            'title1', 
+            '2001-01-01',
+            'AM', 
+            '1:30:00'
+        ]
+        db = None
+        try: 
+            db = connect_to_db()
+            drop_exams_table(db)
+            create_exams_table(db)
+            insert_data_into_exams_table(db, test_df)
+            result = db.run('SELECT * FROM exams;')
+            drop_exams_table(db)
+            print(result)
+            assert [str(value) for value in result[0]] == expected
+        finally:
+            if db:
+                db.close()
+        
+
+class TestSeedDB:
+    """Testing seed_db function from db/seed.py"""
+
+    @pytest.mark.it('Seed DB adds expected data to database.')
+    @patch('db.seed.EDEXCEL_GCSE_DATA', 'test/data/test_edexcel_gcse.xlsx')
+    @patch('db.seed.EDEXCEL_GCE_DATA', 'test/data/test_edexcel_gce.xlsx')
+    def test_seed_db(self):
+        """Testing seed function inserts expected data into databse.
+        
+        Uses patching to get data from test/data/ folder. Uses finally block
+        to ensure database connection is closed"""
+        
+        expected = [
+            'TEST', 
+            '01', 
+            'Pearson', 
+            'GCSE Test', 
+            'Test Exam 1', 
+            '2025-05-22', 
+            'PM', 
+            '0:35:00'
+        ]
+        db = None
+        seed_db()
+        try: 
+            db = connect_to_db()
+            result = db.run('SELECT * FROM exams;')
+            drop_exams_table(db)
+            print(result[0])
+            assert [str(value) for value in result[0]] == expected
+            assert len(result) == 6
+        finally:
+            if db:
+                db.close()

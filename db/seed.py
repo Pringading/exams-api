@@ -9,11 +9,30 @@ from db.utils.edexcel_data import (
 
 
 def seed_db() -> None:
-    """Add exams table and data to database.
-    
-    sklfj"""
+    """Add exams table to database and seed with data.
 
-    pass
+    Uses edexcel_data_to_df function to create dataframe from excel
+    spreadsheets. Connects to the database, drops any existing exams table,
+    creates a new exams table & inserts edexcel data. Finally closes the
+    connection.
+    """
+    db = None
+
+    # create dataframes from excel data
+    edexcel_gcse = edexcel_data_to_df(EDEXCEL_GCSE_DATA)
+    edexcel_gce = edexcel_data_to_df(EDEXCEL_GCE_DATA)
+
+    try:
+        db = connect_to_db()
+        drop_exams_table(db)
+        create_exams_table(db)
+        insert_data_into_exams_table(db, edexcel_gcse)
+        insert_data_into_exams_table(db, edexcel_gce)
+    
+    # use finally block to ensure db connection is closed even if error occurs
+    finally:
+        if db:
+            db.close()
 
 
 def create_exams_table(db: Connection) -> None:
@@ -73,8 +92,11 @@ def insert_data_into_exams_table(db: Connection, df: pd.DataFrame) -> None:
         df: pandas dataframe
     Returns None
     """
-    
-    pass
+    columns = extract_headings_from_df(df)
+    data = df_to_string(df)
+    query = f"INSERT INTO exams ({columns}) VALUES {data}"
+    db.run(query)
+
 
 def drop_exams_table(db: Connection) -> None:
     db.run("DROP TABLE IF EXISTS exams;")
