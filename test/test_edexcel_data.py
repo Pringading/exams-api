@@ -4,7 +4,8 @@ from db.utils.edexcel_data import (
     excel_to_df,
     split_examination_code_col,
     convert_time_to_am_pm,
-    update_edexcel_column_names
+    update_edexcel_column_names,
+    edexcel_data_to_df
 )
 
 
@@ -130,8 +131,8 @@ class TestUpdateExcelColumnNames:
         any columns not accessed by update_excel_column_names function."""
 
         df = pd.DataFrame()
-        df['syllabus_code'] = ["code1"]
-        df['component_code'] = ["code1"]
+        df['syllabus_code'] = ["syllabus1"]
+        df['component_code'] = ["component1"]
         df['Date'] = ["2060-01-01"]
         df['Board'] = ["Pearson"]
         df['Subject'] = ["Subject1"]
@@ -178,11 +179,18 @@ class TestUpdateExcelColumnNames:
         uses test_df."""
 
         result = update_edexcel_column_names(test_df)
-        assert result['syllabus_code'].tolist() == ["code1"]
-        assert result['component_code'].tolist() == ["code1"]
+        assert result['syllabus_code'].tolist() == ["syllabus1"]
+        assert result['component_code'].tolist() == ["component1"]
         assert result['date'].tolist() == ["2060-01-01"]
         assert result['board'].tolist() == ["Pearson"]
         assert result['subject'].tolist() == ["Subject1"]
         assert result['title'].tolist() == ["Title1"]
         assert result['time'].tolist() == ["AM"]
         assert result['duration'].tolist() == ["1h 30m"]
+
+
+class TestExcelDataToDF:
+    @pytest.mark.it('Test excel_to_df is called')
+    def test_calls_excel_to_df(self):
+        pass
+    
