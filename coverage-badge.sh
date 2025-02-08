@@ -2,7 +2,7 @@
 
 COVERAGE=$(coverage report --format=total)
 badge="![Coverage Badge](https://img.shields.io/badge/coverage-"
-REGEX="!\[Coverage Badge\]\(https:\/\/img\.shields\.io\/badge\/coverage-\d{1,3}%25-[a-z]{3,20}\)"
+REGEX="!\[Coverage Badge\]\(https:\/\/img\.shields\.io\/badge\/coverage-[0-9]{1,3}%25-[a-z]{3,20}\)"
 
 if [ $COVERAGE -lt 50 ]; then
     COLOUR="red"
@@ -23,7 +23,7 @@ fi
 badge="${badge}${COVERAGE}%25-${COLOUR})"
 
 if egrep -q "${REGEX}" README.md; then
-    echo badge
+    perl -pi -e "s|${REGEX}|${badge}|" README.md
 else
-    echo no badge
+    echo "${badge}" >> README.md
 fi
