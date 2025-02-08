@@ -3,6 +3,4 @@
 
 API with information about UK Public Exams
 
-work in progress
 Work in Progress
-
