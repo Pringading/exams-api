@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from db.connection import connect_to_db
 
 app = FastAPI()
 
@@ -12,11 +13,11 @@ def get_exams():
     pass
 
 
-@app.get('exam/{syllabus}')
+@app.get('/exam/{syllabus}')
 def get_syllabus_exams(syllabus: str):
     pass
 
 
-@app.get('exam/{syllabus}/{component}')
+@app.get('/exam/{syllabus}/{component}')
 def get_exam(syllabus: str, component: str):
-    pass
+    return {"message": 'Everything OK'}
