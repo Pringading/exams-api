@@ -16,6 +16,7 @@ def seed_db() -> None:
     creates a new exams table & inserts edexcel data. Finally closes the
     connection.
     """
+
     db = None
 
     # create dataframes from excel data
@@ -40,11 +41,11 @@ def create_exams_table(db: Connection) -> None:
 
     db.run("""
         CREATE TABLE exams (
-           syllabus_code VARCHAR(6) NOT NULL,
-           component_code VARCHAR(4),
-           board VARCHAR(20) NOT NULL,
-           subject VARCHAR(40),
-           title VARCHAR(60),
+           syllabus_code VARCHAR(10) NOT NULL,
+           component_code VARCHAR(10),
+           board VARCHAR(50) NOT NULL,
+           subject VARCHAR(80),
+           title VARCHAR(200),
            date DATE,
            time CHAR(2),
            duration INTERVAL,
@@ -79,7 +80,6 @@ def df_to_string(df: pd.DataFrame) -> str:
     row_strings = []
     for row in df.values:
         string = ", ".join(literal(value) for value in row)
-        print(string)
         row_strings.append("(" + string + ")")
     return ", ".join(row_strings)
 
