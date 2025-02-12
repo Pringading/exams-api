@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 import pytest
-from main import app
+from src.app import app
 from db.seed import seed_db
 
 @pytest.fixture
@@ -17,3 +17,7 @@ class TestHealthcheck:
         result = test_client.get('/')
         assert result.status_code == 200
         assert result.json() == {"message": 'Everything OK'}
+    
+class TestGetExam:
+    pass
+    # returns exam
