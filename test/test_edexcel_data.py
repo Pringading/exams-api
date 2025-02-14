@@ -190,9 +190,13 @@ class TestUpdateExcelColumnNames:
 
 
 class TestExcelDataToDF:
+    """Testing edexcel_data_to_df function in db/utils/edexcel_data.py"""
+
     @pytest.mark.it('Test excel data to df transforms data from excel ' +
                     'spreadsheet to expected format.')
-    def test_calls_excel_to_df(self):
+    def test_integration_tesing(self):
+        """Integration testing the edexcel_data_to_df function."""
+
         result = edexcel_data_to_df("test/data/test_edexcel_gcse.xlsx")
         assert result['syllabus_code'].tolist() == ["TEST"] * 3
         assert result['component_code'].tolist() == ["01", "02", "03"]

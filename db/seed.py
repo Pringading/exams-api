@@ -2,8 +2,8 @@ from pg8000.native import Connection, literal, identifier
 import pandas as pd
 from db.connection import connect_to_db
 from db.utils.edexcel_data import (
-    edexcel_data_to_df, 
-    EDEXCEL_GCE_DATA, 
+    edexcel_data_to_df,
+    EDEXCEL_GCE_DATA,
     EDEXCEL_GCSE_DATA
 )
 
@@ -29,7 +29,7 @@ def seed_db() -> None:
         create_exams_table(db)
         insert_data_into_exams_table(db, edexcel_gcse)
         insert_data_into_exams_table(db, edexcel_gce)
-    
+
     # use finally block to ensure db connection is closed even if error occurs
     finally:
         if db:
@@ -56,11 +56,11 @@ def create_exams_table(db: Connection) -> None:
 
 def extract_headings_from_df(df: pd.DataFrame) -> str:
     """Extracts headings from given dataframe.
-    
+
     Args:
         df: pandas dataframe
     Returns comma separated string of headings."""
-    
+
     return ", ".join(identifier(heading) for heading in df.columns)
 
 
@@ -69,6 +69,7 @@ def df_to_string(df: pd.DataFrame) -> str:
 
     Each row is surrounded by brackets and separated by a comma to be used in
     a SQL INSERT query. Uses pg8000 literal function to prevent SQL injection.
+    This adds single quotes to the response.
 
     Example:
     Input:
@@ -86,7 +87,7 @@ def df_to_string(df: pd.DataFrame) -> str:
 
 def insert_data_into_exams_table(db: Connection, df: pd.DataFrame) -> None:
     """Inserts data from a dataframe into exams table.
-    
+
     Args:
         db: pg8000 connection to database.
         df: pandas dataframe
@@ -99,4 +100,6 @@ def insert_data_into_exams_table(db: Connection, df: pd.DataFrame) -> None:
 
 
 def drop_exams_table(db: Connection) -> None:
+    """Connects to given database and drops exams table if it exists."""
+
     db.run("DROP TABLE IF EXISTS exams;")
