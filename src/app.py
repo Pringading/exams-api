@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from db.connection import connect_to_db
-from schemas.response import Exam
-from src.utils.utils import data_to_dict_list
+from src.schemas import Exam
+from src.helpers import data_to_dict_list
 
 app = FastAPI()
 
@@ -14,7 +14,7 @@ def healthcheck():
 @app.get('/exams', response_model=list[Exam])
 def get_exams():
     """Gets information about all exams"""
-    
+
     query = "SELECT * FROM exams;"
     db = None
     try:

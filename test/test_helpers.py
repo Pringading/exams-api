@@ -1,9 +1,9 @@
 import pytest
-from src.utils.utils import data_to_dict_list
+from src.helpers import data_to_dict_list
 
 
 class TestDataToDictList:
-    """Testing data_to_dict_list function from src/utils/utils.py"""
+    """Testing data_to_dict_list function from src/helpers.py"""
 
     @pytest.mark.it('Testing returns list of dictionaries.')
     def test_returns_list_of_dicts(self):

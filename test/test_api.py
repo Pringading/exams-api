@@ -37,7 +37,13 @@ class TestGetExams:
         result = test_client.get('/exams')
         assert isinstance(result.json(), list)
     
-    
+    @pytest.mark.it('Returns expected data')
+    def test_returns_expected_data(self, test_client, seed_database):
+        expected_cols = []
+        result = test_client.get('/exams').json()
+        assert len(result) == 6
+        for row in result:
+            assert "syllabus_code" in result
 
 
 class TestGetExam:
