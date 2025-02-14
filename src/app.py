@@ -4,6 +4,7 @@ from schemas.response import Exam
 
 app = FastAPI()
 
+
 @app.get('/')
 def healthcheck():
     return {"message": 'Everything OK'}
@@ -19,11 +20,11 @@ def get_syllabus_exams(syllabus: str):
     pass
 
 
-@app.get('/exam/{syllabus}/{component}')
+@app.get('/exam/{syllabus}/{component}', response_model=Exam)
 def get_exam(syllabus: str, component: str):
     query = """
-    SELECT * FROM exams 
-    WHERE component_code = :comp 
+    SELECT * FROM exams
+    WHERE component_code = :comp
         AND syllabus_code = :syll;"""
     db = None
     try:

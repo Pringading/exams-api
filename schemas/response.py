@@ -1,7 +1,8 @@
 from pydantic import BaseModel
 from datetime import date, timedelta
 
-class Exam:
+
+class Exam(BaseModel):
     syllabus_code: str
     component_code: str
     board: str
