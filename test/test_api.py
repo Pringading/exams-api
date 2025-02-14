@@ -27,12 +27,22 @@ class TestHealthcheck:
 
 
 class TestGetExams:
-    pass
+    @pytest.mark.it('Returns 200 status code')
+    def test_200_status_code(self, test_client):
+        result = test_client.get('/exams')
+        assert result.status_code == 200
+    
+    @pytest.mark.it('Returns list')
+    def test_resturns_list(self, test_client):
+        result = test_client.get('/exams')
+        assert isinstance(result.json(), list)
+    
+    
 
 
 class TestGetExam:
     @pytest.mark.it('Returns 200 status code')
-    def test_200_status_code(self, test_client, seed_database):
+    def test_200_status_code(self, test_client):
         result = test_client.get('exam/TEST/01')
         assert result.status_code == 200
 
