@@ -9,14 +9,14 @@ load_dotenv()
 
 def connect_to_db() -> Connection:
     """returns pg8000 database connection.
-    
+
     Uses environment variables: USERNAME, DATABASE, PASSWORD, HOST & PORT
     as defined in an .env file in the root directory."""
 
     return Connection(
-        user = getenv('USERNAME'),
-        database = getenv('DATABASE'),
-        password = getenv('PASSWORD'),
-        host = getenv('HOST'),
-        port = getenv('PORT')
+        user=getenv('USERNAME'),
+        database=getenv('DATABASE'),
+        password=getenv('PASSWORD'),
+        host=getenv('HOST'),
+        port=getenv('PORT')
     )

@@ -5,7 +5,7 @@ from src.app import app
 from db.seed import seed_db
 
 
-@pytest.fixture()
+@pytest.fixture(autouse=True)
 @patch("db.seed.EDEXCEL_GCE_DATA", "test/data/test_edexcel_gce.xlsx")
 @patch("db.seed.EDEXCEL_GCSE_DATA", "test/data/test_edexcel_gcse.xlsx")
 def seed_database():
@@ -31,19 +31,28 @@ class TestGetExams:
     def test_200_status_code(self, test_client):
         result = test_client.get('/exams')
         assert result.status_code == 200
-    
+
     @pytest.mark.it('Returns list')
     def test_resturns_list(self, test_client):
         result = test_client.get('/exams')
         assert isinstance(result.json(), list)
-    
+
     @pytest.mark.it('Returns expected data')
     def test_returns_expected_data(self, test_client, seed_database):
-        expected_cols = []
+        expected = {
+            'syllabus_code': 'TEST',
+            'component_code': '01',
+            'board': 'Pearson',
+            'subject': 'GCSE Test',
+            'title': 'Test Exam 1',
+            'date': '2025-05-22',
+            'time': 'PM',
+            'duration': 'PT35M'
+        }
+
         result = test_client.get('/exams').json()
         assert len(result) == 6
-        for row in result:
-            assert "syllabus_code" in result
+        assert expected in result
 
 
 class TestGetExam:
